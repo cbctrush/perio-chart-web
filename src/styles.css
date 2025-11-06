@@ -1,4 +1,3 @@
-/* --- Base Layout --- */
 body {
   font-family: Arial, sans-serif;
   background: #f8f8f8;
@@ -12,7 +11,6 @@ body {
   margin: 0 auto;
 }
 
-/* --- Patient Info Inputs --- */
 .patient-info {
   background: #fff;
   border: 1px solid #ddd;
@@ -26,49 +24,28 @@ body {
   font-size: 15px;
 }
 
-.patient-info input[type="text"],
-.patient-info input[type="date"] {
+.patient-info input {
   padding: 6px;
   border: 1px solid #ccc;
   border-radius: 4px;
 }
 
-/* --- Settings Panel (from your component) --- */
+/* Patient header for printing */
+.chart-header {
+  margin: 8px 0 10px 0;
+  font-size: 15px;
+}
+
+.chart-header p {
+  margin: 2px 0;
+}
+
 .settings-panel {
   background: #fff;
   padding: 16px;
   border-radius: 8px;
   margin-bottom: 16px;
   border: 1px solid #ddd;
-}
-
-.settings-panel h2 {
-  margin-top: 0;
-  font-size: 18px;
-  font-weight: bold;
-}
-
-.settings-section {
-  margin-bottom: 12px;
-}
-
-.settings-section label {
-  display: inline-block;
-  margin: 6px 12px 0 0;
-  font-size: 14px;
-}
-
-.settings-section input[type="number"] {
-  margin-left: 6px;
-  padding: 6px;
-  width: 80px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-/* --- Buttons --- */
-.button-row {
-  margin-bottom: 14px;
 }
 
 .generate-btn,
@@ -88,20 +65,6 @@ body {
   background: #0064d1;
 }
 
-/* --- Chart --- */
-.chart-header {
-  margin: 10px 0 6px 0;
-  font-size: 15px;
-}
-
-.chart-header p {
-  margin: 2px 0;
-}
-
-.chart-table-container {
-  overflow-x: auto;
-}
-
 .chart-table {
   width: 100%;
   border-collapse: collapse;
@@ -118,17 +81,6 @@ body {
 
 .chart-table th {
   background: #e6e6e6;
-  font-weight: bold;
-}
-
-/* Editable depth input */
-.depth-cell {
-  background: #fff;
-  transition: background 0.2s;
-}
-
-.depth-cell:hover {
-  background: #f0f8ff;
 }
 
 .depth-input {
@@ -138,22 +90,21 @@ body {
   border-radius: 3px;
 }
 
-/* Missing tooth styling */
 .missing {
-  background: #dddddd !important;
-  font-style: italic;
+  background: #ddd !important;
   color: #666;
 }
 
-/* --- Print Mode --- */
+/* Hide UI controls in print */
 .print-mode .settings-panel,
-.print-mode .patient-info,
 .print-mode .button-row,
 .print-mode .generate-btn,
-.print-mode .print-btn {
+.print-mode .print-btn,
+.print-mode .patient-info {
   display: none !important;
 }
 
+/* Print rules */
 @media print {
   body {
     background: #fff;
@@ -161,19 +112,17 @@ body {
     print-color-adjust: exact;
   }
 
+  .chart-header.always-show {
+    display: block !important;
+    margin-bottom: 10px;
+  }
+
   .chart-table {
     font-size: 13px;
   }
 
-  .depth-cell:hover {
-    background: #fff !important;
-  }
-
-  /* Hide browser headers/footers in many browsers */
   @page {
-    size: auto;
     margin: 1cm;
-    /* Some engines support margin boxes: */
     @top-left { content: none; }
     @top-center { content: none; }
     @top-right { content: none; }
