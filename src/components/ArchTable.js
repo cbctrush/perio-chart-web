@@ -1,12 +1,7 @@
-import React from 'react';
+import React from "react";
 
-function ArchTable({chart, sites, teeth, missingTeeth}) {
-
-  const handleCellChange = (tooth,index,value) => {
-    const newChart = {...chart};
-    newChart[tooth][index] = Number(value);
-    chart && newChart && chart[tooth] && (chart[tooth] = newChart[tooth]);
-  };
+function ArchTable({ chart, teeth, missingTeeth, updateDepth }) {
+  const sites = ["MB", "B", "DB", "ML", "L", "DL"]; // standard perio chart sites
 
   return (
     <div className="chart-table-container">
@@ -14,18 +9,29 @@ function ArchTable({chart, sites, teeth, missingTeeth}) {
         <thead>
           <tr>
             <th>Tooth</th>
-            {sites.map(site => <th key={site}>{site}</th>)}
+            {sites.map((site) => (
+              <th key={site}>{site}</th>
+            ))}
           </tr>
         </thead>
         <tbody>
-          {teeth.filter(t => !missingTeeth.includes(t)).map(tooth => (
-            <tr key={tooth}>
+          {teeth.map((tooth) => (
+            <tr key={tooth} className={missingTeeth.includes(tooth) ? "missing" : ""}>
               <td>{tooth}</td>
-              {chart[tooth]?.map((value, idx) => (
-                <td key={idx}>
-                  <input type="number" min="0" max="9" value={value} onChange={e=>handleCellChange(tooth,idx,e.target.value)} />
-                </td>
-              ))}
+              {missingTeeth.includes(tooth)
+                ? sites.map((_, idx) => <td key={idx} className="missing">X</td>)
+                : chart[tooth].map((value, idx) => (
+                    <td key={idx} className="depth-cell">
+                      <input
+                        type="number"
+                        min="1"
+                        max="9"
+                        value={value}
+                        className="depth-input"
+                        onChange={(e) => updateDepth(tooth, idx, Number(e.target.value))}
+                      />
+                    </td>
+                  ))}
             </tr>
           ))}
         </tbody>
