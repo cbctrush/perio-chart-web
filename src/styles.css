@@ -1,3 +1,4 @@
+/* --- Base Layout --- */
 body {
   font-family: Arial, sans-serif;
   background: #f8f8f8;
@@ -8,11 +9,33 @@ body {
 
 .app {
   max-width: 1200px;
-  margin: auto;
+  margin: 0 auto;
 }
 
+/* --- Patient Info Inputs --- */
+.patient-info {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-bottom: 12px;
+}
+
+.patient-info label {
+  margin-right: 20px;
+  font-size: 15px;
+}
+
+.patient-info input[type="text"],
+.patient-info input[type="date"] {
+  padding: 6px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* --- Settings Panel (from your component) --- */
 .settings-panel {
-  background: white;
+  background: #fff;
   padding: 16px;
   border-radius: 8px;
   margin-bottom: 16px;
@@ -30,17 +53,22 @@ body {
 }
 
 .settings-section label {
-  display: block;
-  margin-top: 6px;
+  display: inline-block;
+  margin: 6px 12px 0 0;
   font-size: 14px;
 }
 
-.settings-section input {
-  margin-top: 4px;
+.settings-section input[type="number"] {
+  margin-left: 6px;
   padding: 6px;
   width: 80px;
   border: 1px solid #ccc;
   border-radius: 4px;
+}
+
+/* --- Buttons --- */
+.button-row {
+  margin-bottom: 14px;
 }
 
 .generate-btn,
@@ -49,7 +77,7 @@ body {
   margin-right: 10px;
   border: none;
   background: #0078ff;
-  color: white;
+  color: #fff;
   cursor: pointer;
   border-radius: 5px;
   font-size: 15px;
@@ -60,17 +88,28 @@ body {
   background: #0064d1;
 }
 
-/* ---- Chart Table ---- */
+/* --- Chart --- */
+.chart-header {
+  margin: 10px 0 6px 0;
+  font-size: 15px;
+}
+
+.chart-header p {
+  margin: 2px 0;
+}
+
+.chart-table-container {
+  overflow-x: auto;
+}
 
 .chart-table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 20px;
-  background: white;
+  background: #fff;
 }
 
-.chart-table td,
-.chart-table th {
+.chart-table th,
+.chart-table td {
   border: 1px solid #555;
   padding: 6px;
   text-align: center;
@@ -82,9 +121,8 @@ body {
   font-weight: bold;
 }
 
-/* Editable probing depth cell */
+/* Editable depth input */
 .depth-cell {
-  cursor: pointer;
   background: #fff;
   transition: background 0.2s;
 }
@@ -94,22 +132,23 @@ body {
 }
 
 .depth-input {
-  width: 32px;
+  width: 36px;
+  text-align: center;
   border: 1px solid #0078ff;
   border-radius: 3px;
-  text-align: center;
 }
 
-/* -= Missing Tooth Cell =- */
+/* Missing tooth styling */
 .missing {
-  background: #dddddd;
+  background: #dddddd !important;
   font-style: italic;
   color: #666;
 }
 
-/* ---- Printing ---- */
-
+/* --- Print Mode --- */
 .print-mode .settings-panel,
+.print-mode .patient-info,
+.print-mode .button-row,
 .print-mode .generate-btn,
 .print-mode .print-btn {
   display: none !important;
@@ -117,7 +156,7 @@ body {
 
 @media print {
   body {
-    background: white;
+    background: #fff;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
   }
@@ -127,6 +166,19 @@ body {
   }
 
   .depth-cell:hover {
-    background: white !important;
+    background: #fff !important;
+  }
+
+  /* Hide browser headers/footers in many browsers */
+  @page {
+    size: auto;
+    margin: 1cm;
+    /* Some engines support margin boxes: */
+    @top-left { content: none; }
+    @top-center { content: none; }
+    @top-right { content: none; }
+    @bottom-left { content: none; }
+    @bottom-center { content: none; }
+    @bottom-right { content: none; }
   }
 }
