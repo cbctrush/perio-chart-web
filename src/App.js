@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import ArchTable from "./components/ArchTable";
 import SettingsPanel from "./components/SettingsPanel";
+import ArchTable from "./components/ArchTable";
 import "./styles.css";
 
 export default function App() {
@@ -12,47 +12,55 @@ export default function App() {
   });
 
   const [missingTeeth, setMissingTeeth] = useState([]);
-  const [chartData, setChartData] = useState({});
+  const [chart, setChart] = useState({});
   const [printMode, setPrintMode] = useState(false);
 
-  const toothNumbers = [
-    // Maxillary (UR → UL)
+  // FDI numbering layout (maxillary then mandibular)
+  const teeth = [
+    // Maxilla (right → left)
     18,17,16,15,14,13,12,11,21,22,23,24,25,26,27,28,
-    // Mandibular (LL → LR)
+    // Mandible (left → right)
     48,47,46,45,44,43,42,41,31,32,33,34,35,36,37,38,
   ];
 
-  function generateValue() {
-    const weightedList = [];
-    Object.entries(probabilities).forEach(([value, weight]) => {
-      for (let i = 0; i < weight; i++) weightedList.push(value);
+  function weightedRandomValue() {
+    const pool = [];
+    Object.entries(probabilities).forEach(([depth, weight]) => {
+      for (let i = 0; i < weight; i++) pool.push(Number(depth));
     });
-    return parseInt(weightedList[Math.floor(Math.random() * weightedList.length)], 10);
+    return pool[Math.floor(Math.random() * pool.length)];
   }
 
   function generateChart() {
-    const data = {};
-    toothNumbers.forEach(num => {
-      if (missingTeeth.includes(num.toString())) {
-        data[num] = ["-", "-", "-", "-", "-", "-"];
+    const newChart = {};
+    teeth.forEach((tooth) => {
+      if (missingTeeth.includes(String(tooth))) {
+        newChart[tooth] = ["-", "-", "-", "-", "-", "-"];
       } else {
-        data[num] = [generateValue(), generateValue(), generateValue(), generateValue(), generateValue(), generateValue()];
+        newChart[tooth] = [
+          weightedRandomValue(),
+          weightedRandomValue(),
+          weightedRandomValue(),
+          weightedRandomValue(),
+          weightedRandomValue(),
+          weightedRandomValue(),
+        ];
       }
     });
-    setChartData(data);
+    setChart(newChart);
   }
 
-  function updateDepth(tooth, index, newValue) {
-    setChartData(prev => ({
+  const updateDepth = (tooth, index, value) => {
+    setChart(prev => ({
       ...prev,
-      [tooth]: prev[tooth].map((v, i) => (i === index ? newValue : v))
+      [tooth]: prev[tooth].map((v, i) => (i === index ? value : v)),
     }));
-  }
+  };
 
   return (
     <div className={printMode ? "print-mode" : "app"}>
       
-      {/* Controls Section */}
+      {/* Hide controls when printing */}
       {!printMode && (
         <SettingsPanel
           probabilities={probabilities}
@@ -68,13 +76,12 @@ export default function App() {
         </button>
       )}
 
-      {/* Print Button */}
-      {Object.keys(chartData).length > 0 && (
+      {Object.keys(chart).length > 0 && (
         <button
           className="print-btn"
           onClick={() => {
             setPrintMode(true);
-            setTimeout(() => window.print(), 50);
+            setTimeout(() => window.print(), 100);
             setTimeout(() => setPrintMode(false), 500);
           }}
         >
@@ -82,8 +89,12 @@ export default function App() {
         </button>
       )}
 
-      {/* Chart */}
-      <ArchTable chartData={chartData} updateDepth={updateDepth} />
+      <ArchTable
+        chart={chart}
+        teeth={teeth}
+        missingTeeth={missingTeeth}
+        updateDepth={updateDepth}
+      />
     </div>
   );
 }
