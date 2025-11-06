@@ -1,0 +1,57 @@
+body {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+}
+
+h1,h2,h3{
+  text-align:center;
+}
+
+.settings-panel{
+  border:1px solid #ccc;
+  border-radius:8px;
+  padding:15px;
+  margin-bottom:20px;
+}
+
+.weights label, .missing-teeth label {
+  display:inline-block;
+  margin-right:10px;
+}
+
+.teeth-list{
+  max-height:150px;
+  overflow-y:scroll;
+  border:1px solid #ddd;
+  padding:5px;
+}
+
+.generate-btn, .print-btn{
+  display:block;
+  margin:10px auto;
+  padding:10px 20px;
+  font-size:16px;
+  cursor:pointer;
+}
+
+.chart-table-container{
+  overflow-x:auto;
+  margin-top:10px;
+  margin-bottom:20px;
+}
+
+.chart-table{
+  width:100%;
+  border-collapse:collapse;
+}
+
+.chart-table th, .chart-table td{
+  border:1px solid #ccc;
+  padding:5px;
+  text-align:center;
+}
+
+.chart-table input{
+  width:40px;
+  text-align:center;
+}
