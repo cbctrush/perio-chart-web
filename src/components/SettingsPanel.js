@@ -7,11 +7,16 @@ const allTeeth = [
   31,32,33,34,35,36,37,38
 ];
 
+// Includes patient name/date inputs + probabilities + missing teeth
 function SettingsPanel({
   probabilities = { 1: 20, 2: 40, 3: 40, 4: 0 },
   setProbabilities = () => {},
   missingTeeth = [],
-  setMissingTeeth = () => {}
+  setMissingTeeth = () => {},
+  patientName = "",
+  setPatientName = () => {},
+  examDate = "",
+  setExamDate = () => {}
 }) {
   const handleWeightChange = (e) => {
     const { name, value } = e.target;   // name = "1" | "2" | "3" | "4"
@@ -38,6 +43,28 @@ function SettingsPanel({
   return (
     <div className="settings-panel">
       <h2>Settings</h2>
+
+      {/* Patient Info inside settings for visibility */}
+      <div className="settings-section">
+        <h3>Patient</h3>
+        <label>
+          Name:&nbsp;
+          <input
+            type="text"
+            value={patientName}
+            onChange={(e) => setPatientName(e.target.value)}
+            placeholder="e.g., John Smith"
+          />
+        </label>
+        <label>
+          Date:&nbsp;
+          <input
+            type="date"
+            value={examDate}
+            onChange={(e) => setExamDate(e.target.value)}
+          />
+        </label>
+      </div>
 
       <div className="weights settings-section">
         <h3>Probing Depth Weights (%)</h3>
