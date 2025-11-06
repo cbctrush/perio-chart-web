@@ -1,72 +1,132 @@
 body {
   font-family: Arial, sans-serif;
+  background: #f8f8f8;
+  margin: 0;
   padding: 20px;
+  color: #222;
 }
 
-h1,h2,h3{
-  text-align:center;
+.app {
+  max-width: 1200px;
+  margin: auto;
 }
 
-.settings-panel{
-  border:1px solid #ccc;
-  border-radius:8px;
-  padding:15px;
-  margin-bottom:20px;
+.settings-panel {
+  background: white;
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  border: 1px solid #ddd;
 }
 
-.weights label, .missing-teeth label {
-  display:inline-block;
-  margin-right:10px;
+.settings-panel h2 {
+  margin-top: 0;
+  font-size: 18px;
+  font-weight: bold;
 }
 
-.teeth-list{
-  max-height:150px;
-  overflow-y:scroll;
-  border:1px solid #ddd;
-  padding:5px;
+.settings-section {
+  margin-bottom: 12px;
 }
 
-.generate-btn, .print-btn{
-  display:block;
-  margin:10px auto;
-  padding:10px 20px;
-  font-size:16px;
-  cursor:pointer;
-}
-
-.chart-table-container{
-  overflow-x:auto;
-  margin-top:10px;
-  margin-bottom:20px;
-}
-
-.chart-table{
-  width:100%;
-  border-collapse:collapse;
-}
-
-.chart-table th, .chart-table td{
-  border:1px solid #ccc;
-  padding:5px;
-  text-align:center;
-}
-
-.chart-table input{
-  width:40px;
-  text-align:center;
-}
-/* Default: everything visible */
-.controls-container, .chart-container {
+.settings-section label {
   display: block;
+  margin-top: 6px;
+  font-size: 14px;
 }
 
-/* When printing: hide controls, only show chart */
+.settings-section input {
+  margin-top: 4px;
+  padding: 6px;
+  width: 80px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.generate-btn,
+.print-btn {
+  padding: 10px 14px;
+  margin-right: 10px;
+  border: none;
+  background: #0078ff;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 15px;
+}
+
+.generate-btn:hover,
+.print-btn:hover {
+  background: #0064d1;
+}
+
+/* ---- Chart Table ---- */
+
+.chart-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background: white;
+}
+
+.chart-table td,
+.chart-table th {
+  border: 1px solid #555;
+  padding: 6px;
+  text-align: center;
+  font-size: 14px;
+}
+
+.chart-table th {
+  background: #e6e6e6;
+  font-weight: bold;
+}
+
+/* Editable probing depth cell */
+.depth-cell {
+  cursor: pointer;
+  background: #fff;
+  transition: background 0.2s;
+}
+
+.depth-cell:hover {
+  background: #f0f8ff;
+}
+
+.depth-input {
+  width: 32px;
+  border: 1px solid #0078ff;
+  border-radius: 3px;
+  text-align: center;
+}
+
+/* -= Missing Tooth Cell =- */
+.missing {
+  background: #dddddd;
+  font-style: italic;
+  color: #666;
+}
+
+/* ---- Printing ---- */
+
+.print-mode .settings-panel,
+.print-mode .generate-btn,
+.print-mode .print-btn {
+  display: none !important;
+}
+
 @media print {
-  .controls-container {
-    display: none;
+  body {
+    background: white;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
   }
-  .chart-container {
-    display: block;
+
+  .chart-table {
+    font-size: 13px;
+  }
+
+  .depth-cell:hover {
+    background: white !important;
   }
 }
-
