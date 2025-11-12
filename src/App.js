@@ -5,7 +5,7 @@ import "./styles.css";
 
 export default function App() {
   const [probabilities, setProbabilities] = useState({ 1: 20, 2: 40, 3: 40, 4: 0 });
-  const [missingTeeth, setMissingTeeth] = useState([]);   // store as STRINGS
+  const [missingTeeth, setMissingTeeth] = useState([]);
   const [chart, setChart] = useState({});
   const [printMode, setPrintMode] = useState(false);
 
@@ -14,9 +14,10 @@ export default function App() {
 
   const teeth = [
     18,17,16,15,14,13,12,11,21,22,23,24,25,26,27,28,
-    48,47,46,45,44,43,42,41,31,32,33,34,35,36,37,38,
+    48,47,46,45,44,43,42,41,31,32,33,34,35,36,37,38
   ];
 
+  // Weighted random depth generation
   function weightedRandomValue() {
     const pool = [];
     Object.entries(probabilities).forEach(([depth, pct]) => {
@@ -39,19 +40,28 @@ export default function App() {
     setChart(next);
   }
 
+  // ✅ Fix: supports both single-value edits and 6-value merged box updates
   const updateDepth = (tooth, index, value) => {
-    // allow "-" to remain for missing rows; otherwise enforce number 1..9
-    const n = Number(value);
-    const newVal = Number.isFinite(n) ? n : value;
+    if (Array.isArray(value)) {
+      setChart(prev => ({
+        ...prev,
+        [tooth]: value
+      }));
+      return;
+    }
+
+    const v = Number(value);
     setChart(prev => ({
       ...prev,
-      [tooth]: (prev[tooth] || Array(6).fill("")).map((x,i)=> i===index ? newVal : x)
+      [tooth]: (prev[tooth] || Array(6).fill("")).map((x,i)=>
+        i===index ? (Number.isFinite(v)?v:x) : x
+      )
     }));
   };
 
   return (
     <div className={printMode ? "print-mode" : "app"}>
-      {/* Patient inputs */}
+      {/* Patient info section */}
       {!printMode && (
         <div className="patient-info">
           <label>
@@ -74,7 +84,7 @@ export default function App() {
         </div>
       )}
 
-      {/* Printed header */}
+      {/* Always show patient info header when printing */}
       {Object.keys(chart).length > 0 && (
         <div className="chart-header always-show">
           <p><strong>Patient:</strong> {patientName || "________________"}</p>
@@ -92,7 +102,7 @@ export default function App() {
         />
       )}
 
-      {/* Actions */}
+      {/* Buttons */}
       {!printMode && (
         <div className="button-row">
           <button className="generate-btn" onClick={generateChart}>
@@ -113,7 +123,7 @@ export default function App() {
         </div>
       )}
 
-      {/* NEW: Visual chart */}
+      {/* Main chart */}
       <ToothChart
         chart={chart}
         missingTeeth={missingTeeth}
