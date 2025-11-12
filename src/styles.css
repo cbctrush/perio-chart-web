@@ -122,4 +122,100 @@ body {
   min-width: 55px;
 }
 
-/* E*
+/* Editable boxes (top & bottom) */
+.site-box {
+  width: 60px;
+  height: 26px;
+  text-align: center;
+  font-weight: 700;
+  font-size: 13px;
+  border: 1px solid #999;
+  border-radius: 6px;
+  background: #fff;
+}
+
+/* Remove numeric spinners globally */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+/* Tooth number label */
+.tooth-id {
+  font-size: 13px;
+  font-weight: 700;
+  color: #222;
+}
+.missing-tooth .tooth-id {
+  color: #777;
+}
+.site-missing {
+  background: #e0e0e0;
+  color: #666;
+  border-color: #bbb;
+}
+
+/* --- Print Mode --- */
+.print-mode .patient-info,
+.print-mode .settings-panel,
+.print-mode .button-row,
+.print-mode .generate-btn,
+.print-mode .print-btn {
+  display: none !important;
+}
+
+@media print {
+  body {
+    background: #fff;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Force landscape orientation */
+  @page {
+    size: A4 landscape;
+    margin: 0.5cm;
+  }
+
+  html,
+  body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden !important;
+  }
+
+  .chart-header.always-show {
+    display: block !important;
+    margin-bottom: 10px;
+  }
+
+  .tooth-chart-wrapper {
+    transform: scale(0.95);
+    transform-origin: top left;
+    width: 100%;
+  }
+
+  .arch {
+    gap: 2px;
+  }
+
+  .site-box {
+    width: 55px;
+    height: 24px;
+    font-size: 12px;
+  }
+
+  /* Hide browser header/footer on print (where supported) */
+  @page {
+    @top-left { content: none; }
+    @top-center { content: none; }
+    @top-right { content: none; }
+    @bottom-left { content: none; }
+    @bottom-center { content: none; }
+    @bottom-right { content: none; }
+  }
+}
