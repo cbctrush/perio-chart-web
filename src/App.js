@@ -1,22 +1,20 @@
 import React, { useState } from "react";
 import SettingsPanel from "./components/SettingsPanel";
-import ArchTable from "./components/ArchTable";
+import ToothChart from "./components/ToothChart";
 import "./styles.css";
 
 export default function App() {
   const [probabilities, setProbabilities] = useState({ 1: 20, 2: 40, 3: 40, 4: 0 });
-  const [missingTeeth, setMissingTeeth] = useState([]);   // store as strings
+  const [missingTeeth, setMissingTeeth] = useState([]);   // store as STRINGS
   const [chart, setChart] = useState({});
   const [printMode, setPrintMode] = useState(false);
 
-  // Patient info
   const [patientName, setPatientName] = useState("");
   const [examDate, setExamDate] = useState("");
 
-  // FDI numbering (UR→UL, then LL→LR)
   const teeth = [
     18,17,16,15,14,13,12,11,21,22,23,24,25,26,27,28,
-    48,47,46,45,44,43,42,41,31,32,33,34,35,36,37,38
+    48,47,46,45,44,43,42,41,31,32,33,34,35,36,37,38,
   ];
 
   function weightedRandomValue() {
@@ -42,16 +40,18 @@ export default function App() {
   }
 
   const updateDepth = (tooth, index, value) => {
-    const v = Number(value);
+    // allow "-" to remain for missing rows; otherwise enforce number 1..9
+    const n = Number(value);
+    const newVal = Number.isFinite(n) ? n : value;
     setChart(prev => ({
       ...prev,
-      [tooth]: (prev[tooth] || Array(6).fill("")).map((x,i)=> i===index ? (Number.isFinite(v) ? v : x) : x)
+      [tooth]: (prev[tooth] || Array(6).fill("")).map((x,i)=> i===index ? newVal : x)
     }));
   };
 
   return (
     <div className={printMode ? "print-mode" : "app"}>
-      {/* Patient name/date ALWAYS visible when not printing */}
+      {/* Patient inputs */}
       {!printMode && (
         <div className="patient-info">
           <label>
@@ -74,7 +74,7 @@ export default function App() {
         </div>
       )}
 
-      {/* Printed header (always shows on print if a chart exists) */}
+      {/* Printed header */}
       {Object.keys(chart).length > 0 && (
         <div className="chart-header always-show">
           <p><strong>Patient:</strong> {patientName || "________________"}</p>
@@ -82,7 +82,7 @@ export default function App() {
         </div>
       )}
 
-      {/* Settings remain as-is */}
+      {/* Settings */}
       {!printMode && (
         <SettingsPanel
           probabilities={probabilities}
@@ -92,6 +92,7 @@ export default function App() {
         />
       )}
 
+      {/* Actions */}
       {!printMode && (
         <div className="button-row">
           <button className="generate-btn" onClick={generateChart}>
@@ -112,9 +113,9 @@ export default function App() {
         </div>
       )}
 
-      <ArchTable
+      {/* NEW: Visual chart */}
+      <ToothChart
         chart={chart}
-        teeth={teeth}
         missingTeeth={missingTeeth}
         updateDepth={updateDepth}
       />
