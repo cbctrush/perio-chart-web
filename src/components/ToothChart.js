@@ -3,114 +3,95 @@ import React from "react";
 const upperTeeth = [18,17,16,15,14,13,12,11,21,22,23,24,25,26,27,28];
 const lowerTeeth = [48,47,46,45,44,43,42,41,31,32,33,34,35,36,37,38];
 
-// Map a numeric depth to a color class
-function depthClass(v) {
-  const n = Number(v);
-  if (!Number.isFinite(n)) return "site site-missing";
-  if (n <= 3) return "site site-ok";
-  if (n === 4) return "site site-warn";
-  return "site site-bad"; // >=5
+// Decide color based on max depth value in the box
+function colorForValues(text) {
+  const values = text
+    .split(" ")
+    .map(v => parseInt(v))
+    .filter(v => !isNaN(v));
+  if (!values.length) return "#000"; // default black
+  const maxVal = Math.max(...values);
+  if (maxVal <= 3) return "#00a651";
+  if (maxVal === 4) return "#ff8c00";
+  return "#d93025";
 }
 
-function ToothColumn({ tooth, row, isMissing, onChange }) {
-  // Row format: [MB, B, DB, ML, L, DL] or ["-","-","-","-","-","-"]
-  const buccal = row?.slice(0,3) ?? ["","",""];
-  const lingual = row?.slice(3,6) ?? ["","",""];
-
+function ToothBox({tooth, topValue, bottomValue, isMissing, onChange}) {
   if (isMissing) {
     return (
       <div className="tooth-col missing-tooth">
-        <div className="site-row">
-          <div className="site site-missing">X</div>
-          <div className="site site-missing">X</div>
-          <div className="site site-missing">X</div>
-        </div>
+        <div className="site-box site-missing">X</div>
         <div className="tooth-id missing-id">{tooth}</div>
-        <div className="site-row">
-          <div className="site site-missing">X</div>
-          <div className="site site-missing">X</div>
-          <div className="site site-missing">X</div>
-        </div>
+        <div className="site-box site-missing">X</div>
       </div>
     );
   }
 
   return (
     <div className="tooth-col">
-      {/* Buccal (top) */}
-      <div className="site-row">
-        {buccal.map((v, i) => (
-          <input
-            key={`b-${i}`}
-            className={depthClass(v)}
-            type="number"
-            min="1"
-            max="9"
-            value={v}
-            onChange={(e) => onChange(tooth, i, e.target.value)}
-          />
-        ))}
-      </div>
-
-      {/* Tooth ID */}
+      <input
+        type="text"
+        className="site-box"
+        style={{color: colorForValues(topValue)}}
+        value={topValue}
+        onChange={(e) => onChange(tooth, "top", e.target.value)}
+        placeholder="3 2 4"
+      />
       <div className="tooth-id">{tooth}</div>
-
-      {/* Lingual (bottom) */}
-      <div className="site-row">
-        {lingual.map((v, i) => (
-          <input
-            key={`l-${i}`}
-            className={depthClass(v)}
-            type="number"
-            min="1"
-            max="9"
-            value={v}
-            onChange={(e) => onChange(tooth, i + 3, e.target.value)}
-          />
-        ))}
-      </div>
+      <input
+        type="text"
+        className="site-box"
+        style={{color: colorForValues(bottomValue)}}
+        value={bottomValue}
+        onChange={(e) => onChange(tooth, "bottom", e.target.value)}
+        placeholder="2 3 3"
+      />
     </div>
   );
 }
 
-export default function ToothChart({ chart = {}, missingTeeth = [], updateDepth }) {
+export default function ToothChart({chart = {}, missingTeeth = [], updateDepth}) {
   const missingSet = new Set(missingTeeth.map(String));
+
+  const handleChange = (tooth, pos, text) => {
+    const parts = text.split(" ").map(v => parseInt(v));
+    const arr = chart[tooth] ? [...chart[tooth]] : Array(6).fill("");
+    if (pos === "top") {
+      for (let i=0;i<3;i++) arr[i] = parts[i] || "";
+    } else {
+      for (let i=0;i<3;i++) arr[i+3] = parts[i] || "";
+    }
+    updateDepth(tooth, -1, arr); // reuse updateDepth logic
+  };
 
   return (
     <div className="tooth-chart-wrapper">
-      {/* Upper */}
       <div className="arch-block">
         <div className="arch-title">Upper Arch</div>
         <div className="arch">
-          {upperTeeth.map((t) => (
-            <ToothColumn
+          {upperTeeth.map(t => (
+            <ToothBox
               key={t}
               tooth={t}
-              row={chart[t]}
               isMissing={missingSet.has(String(t))}
-              onChange={(tooth, idx, val) => {
-                const num = Number(val);
-                updateDepth(tooth, idx, Number.isFinite(num) ? num : val);
-              }}
+              topValue={(chart[t]?.slice(0,3) || []).join(" ")}
+              bottomValue={(chart[t]?.slice(3,6) || []).join(" ")}
+              onChange={handleChange}
             />
           ))}
         </div>
       </div>
-
-      {/* Lower */}
       <div className="arch-block">
         <div className="arch-title">Lower Arch</div>
         <div className="arch">
-          {lowerTeeth.map((t) => (
-            <ToothColumn
+          {lowerTeeth.map(t => (
+            <ToothBox
               key={t}
               tooth={t}
-              row={chart[t]}
               isMissing={missingSet.has(String(t))}
-              onChange={(tooth, idx, val) => {
-                const num = Number(val);
-                updateDepth(tooth, idx, Number.isFinite(num) ? num : val);
-              }}
+              topValue={(chart[t]?.slice(0,3) || []).join(" ")}
+              bottomValue={(chart[t]?.slice(3,6) || []).join(" ")}
+              onChange={handleChange}
             />
           ))}
         </div>

@@ -1,112 +1,39 @@
-/* --- Base Layout --- */
-body {
-  font-family: Arial, sans-serif;
-  background: #f8f8f8;
-  margin: 0;
-  padding: 20px;
-  color: #222;
-}
-.app { max-width: 1200px; margin: 0 auto; }
-
-/* Patient Info */
-.patient-info {
+/* Compact chart text box style */
+.site-box {
+  width: 70px;
+  height: 32px;
+  text-align: center;
+  font-weight: 700;
+  font-size: 14px;
+  border: 1px solid #999;
+  border-radius: 6px;
   background: #fff;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 12px 16px;
-  margin-bottom: 12px;
-}
-.patient-info label { margin-right: 20px; font-size: 15px; }
-.patient-info input { padding: 6px; border: 1px solid #ccc; border-radius: 4px; }
-
-/* Settings panel & buttons (existing look) */
-.settings-panel {
-  background: #fff; padding: 16px; border-radius: 8px;
-  margin-bottom: 16px; border: 1px solid #ddd;
-}
-.settings-panel h2 { margin-top: 0; font-size: 18px; font-weight: bold; }
-.settings-section { margin-bottom: 12px; }
-.settings-section label { display: inline-block; margin: 6px 12px 0 0; font-size: 14px; }
-.settings-section input[type="number"] { margin-left: 6px; padding: 6px; width: 80px; border: 1px solid #ccc; border-radius: 4px; }
-
-.button-row { margin-bottom: 14px; }
-.generate-btn, .print-btn {
-  padding: 10px 14px; margin-right: 10px; border: none;
-  background: #0078ff; color: #fff; cursor: pointer; border-radius: 5px; font-size: 15px;
-}
-.generate-btn:hover, .print-btn:hover { background: #0064d1; }
-
-/* Printed header */
-.chart-header { margin: 8px 0 10px 0; font-size: 15px; }
-.chart-header p { margin: 2px 0; }
-
-/* --- Visual Perio Chart --- */
-.tooth-chart-wrapper { background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 16px; }
-.arch-block { margin-bottom: 18px; }
-.arch-title { font-weight: 700; margin-bottom: 8px; }
-
-.arch {
-  display: flex;
-  gap: 6px;
-  align-items: flex-start;
-  justify-content: space-between;
-  overflow-x: auto;
-  padding: 4px 2px;
 }
 
+/* Remove spinners for number inputs (cross-browser) */
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+/* Maintain spacing */
 .tooth-col {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 6px;
-  min-width: 46px; /* ensures visibility when narrow */
+  min-width: 70px;
 }
-
-.site-row {
+.arch {
   display: flex;
-  gap: 4px;
+  gap: 6px;
+  justify-content: space-between;
+  overflow-x: auto;
 }
-
-.site {
-  width: 32px;
-  height: 28px;
-  border-radius: 4px;
-  text-align: center;
-  border: 1px solid #999;
-  font-weight: 600;
-}
-
-.site:focus { outline: 2px solid #0078ff; }
-
-/* Color states */
-.site-ok  { background: #8fd694; }  /* 1-3 */
-.site-warn{ background: #ffb347; }  /* 4 */
-.site-bad { background: #ff6961; }  /* >=5 */
-.site-missing { background: #e0e0e0; color: #666; border-color: #bbb; }
-
-.tooth-id { font-size: 13px; font-weight: 700; color: #222; }
-.missing-tooth .tooth-id { color: #777; }
-
-/* --- Print Mode --- */
-.print-mode .patient-info,
-.print-mode .settings-panel,
-.print-mode .button-row,
-.print-mode .generate-btn,
-.print-mode .print-btn { display: none !important; }
-
-@media print {
-  body { background: #fff; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  .chart-header.always-show { display: block !important; margin-bottom: 10px; }
-
-  /* Hide browser headers/footers where supported */
-  @page {
-    size: auto;
-    margin: 1cm;
-    @top-left { content: none; }
-    @top-center { content: none; }
-    @top-right { content: none; }
-    @bottom-left { content: none; }
-    @bottom-center { content: none; }
-    @bottom-right { content: none; }
-  }
+.arch-block {
+  margin-bottom: 18px;
 }
